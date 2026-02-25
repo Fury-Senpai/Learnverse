@@ -10,14 +10,46 @@ const PaymentSuccess = () => {
   const sessionId = searchParams.get('session_id');
 
   useEffect(() => {
+    let interval;
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    const verifyPayment = async () => {
+      try {
+        const res = await axios.get(`${API}/payments/verify/${sessionId}`);
+        if (res.data.status === 'completed') {
+          setPurchase(res.data);
+          setLoading(false);
+          if (interval) clearInterval(interval);
+        } else {
+          attempts++;
+          if (attempts >= maxAttempts) {
+            setLoading(false);
+            if (interval) clearInterval(interval);
+          }
+        }
+      } catch (err) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          setLoading(false);
+          if (interval) clearInterval(interval);
+        }
+      }
+    };
+
     if (sessionId) {
+      // Initial delay to give webhook time
       setTimeout(() => {
-        axios.get(`${API}/payments/verify/${sessionId}`)
-          .then(res => setPurchase(res.data))
-          .catch(() => {})
-          .finally(() => setLoading(false));
-      }, 2000); // wait for webhook
-    } else { setLoading(false); }
+        verifyPayment();
+        interval = setInterval(verifyPayment, 3000);
+      }, 1500);
+    } else {
+      setLoading(false);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [sessionId]);
 
   return (

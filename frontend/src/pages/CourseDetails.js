@@ -6,7 +6,7 @@ import { useAuth, API } from '../context/AuthContext';
 /* ─── Helpers ─── */
 const Stars = ({ value, onRate }) => (
   <div className="stars">
-    {[1,2,3,4,5].map(s => (
+    {[1, 2, 3, 4, 5].map(s => (
       <span key={s} className={`star ${s <= value ? 'filled' : 'empty'}`}
         onClick={() => onRate && onRate(s)} style={{ cursor: onRate ? 'pointer' : 'default' }}>★</span>
     ))}
@@ -134,7 +134,7 @@ const CourseDetails = () => {
           const accessRes = await axios.get(`${API}/payments/has-access/${id}`);
           setHasAccess(accessRes.data.hasAccess);
         }
-      } catch {} finally { setLoading(false); }
+      } catch { } finally { setLoading(false); }
     };
     fetchData();
   }, [id, user]);
@@ -152,6 +152,13 @@ const CourseDetails = () => {
       window.location.href = res.data.url;
     } catch (err) { alert(err.response?.data?.message || 'Payment error'); }
     finally { setBuying(false); }
+  };
+
+  const checkAccess = async () => {
+    try {
+      const res = await axios.get(`${API}/payments/has-access/${id}`);
+      setHasAccess(res.data.hasAccess);
+    } catch { }
   };
 
   const handleSaveCourse = async () => {
@@ -212,7 +219,7 @@ const CourseDetails = () => {
       const res = await axios.post(`${API}/courses/${id}/comments`, { body: newComment });
       setComments([res.data, ...comments]);
       setNewComment('');
-    } catch {}
+    } catch { }
   };
 
   const handleRate = async (rating) => {
@@ -305,7 +312,7 @@ const CourseDetails = () => {
                   <div className="form-group">
                     <label>Category</label>
                     <select className="form-control" value={courseForm.category} onChange={e => setCourseForm({ ...courseForm, category: e.target.value })}>
-                      {['General','Programming','Design','Business','Marketing','Science','Math','Language','Music','Other'].map(c => <option key={c}>{c}</option>)}
+                      {['General', 'Programming', 'Design', 'Business', 'Marketing', 'Science', 'Math', 'Language', 'Music', 'Other'].map(c => <option key={c}>{c}</option>)}
                     </select>
                   </div>
                 </div>
@@ -359,9 +366,16 @@ const CourseDetails = () => {
             ) : canWatch ? (
               <div className="alert alert-success">✅ You have access to this course</div>
             ) : (
-              <button className="btn btn-primary btn-full btn-lg" onClick={handleBuy} disabled={buying}>
-                {buying ? 'Redirecting...' : `Enroll Now — $${course.price}`}
-              </button>
+              <div>
+                <button className="btn btn-primary btn-full btn-lg" onClick={handleBuy} disabled={buying}>
+                  {buying ? 'Redirecting...' : `Enroll Now — $${course.price}`}
+                </button>
+                <div style={{ textAlign: 'center', marginTop: 12 }}>
+                  <button onClick={checkAccess} style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontSize: 13, textDecoration: 'underline' }}>
+                    Already purchased? Refresh access
+                  </button>
+                </div>
+              </div>
             )}
             {canWatch && !isOwner && (
               <div style={{ marginTop: 20 }}>

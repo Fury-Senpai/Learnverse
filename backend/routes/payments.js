@@ -104,27 +104,51 @@ router.post('/checkout/session/:teacherId', protect, async (req, res) => {
 router.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
+
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
+    console.error(`Webhook Signature Error: ${err.message}`);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
+
+    // Failsafe: only proceed if paid
+    if (session.payment_status !== 'paid') {
+      console.log(`Payment not confirmed for session ${session.id}`);
+      return res.json({ received: true, status: 'not_paid' });
+    }
+
     const { type, courseId, studentId, teacherId } = session.metadata;
+    console.log(`Processing completed checkout: type=${type}, id=${courseId || 'N/A'}`);
 
-    await Purchase.findOneAndUpdate(
-      { stripeSessionId: session.id },
-      { status: 'completed' }
-    );
+    try {
+      const purchase = await Purchase.findOneAndUpdate(
+        { stripeSessionId: session.id },
+        { status: 'completed' },
+        { new: true }
+      );
 
-    if (type === 'course') {
-      await Course.findByIdAndUpdate(courseId, { $inc: { totalStudents: 1 } });
-      await User.findByIdAndUpdate(teacherId, { $inc: { earnings: session.amount_total * 0.007 } });
-    } else if (type === 'session') {
-      await Session.findOneAndUpdate({ stripeSessionId: session.id }, { paid: true, status: 'confirmed' });
-      await User.findByIdAndUpdate(session.metadata.teacherId, { $inc: { earnings: session.amount_total * 0.007 } });
+      if (!purchase) {
+        console.error(`Purchase record not found for session ${session.id}`);
+        // Consider creating it here if it's missing
+      }
+
+      if (type === 'course' && courseId) {
+        await Course.findByIdAndUpdate(courseId, { $inc: { totalStudents: 1 } });
+        // amount_total is in cents, earnings in dollars. 0.7 * (cents / 100) = 0.007 * cents
+        const teacherShare = session.amount_total * 0.007;
+        await User.findByIdAndUpdate(teacherId, { $inc: { earnings: teacherShare } });
+      } else if (type === 'session') {
+        await Session.findOneAndUpdate({ stripeSessionId: session.id }, { paid: true, status: 'confirmed' });
+        const teacherShare = session.amount_total * 0.007;
+        await User.findByIdAndUpdate(session.metadata.teacherId, { $inc: { earnings: teacherShare } });
+      }
+    } catch (dbErr) {
+      console.error(`Database error during webhook: ${dbErr.message}`);
+      return res.status(500).json({ error: 'Internal server error' });
     }
   }
 

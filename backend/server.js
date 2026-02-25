@@ -9,7 +9,15 @@ const app = express();
 
 // Stripe webhook needs raw body
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
-app.use(express.json());
+
+// For all other routes, use json
+app.use((req, res, next) => {
+  if (req.originalUrl === '/api/payments/webhook') {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
+});
 app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:3000', credentials: true }));
 
 // Routes

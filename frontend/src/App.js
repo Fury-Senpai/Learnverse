@@ -1,0 +1,59 @@
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import './index.css';
+
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Courses from './pages/Courses';
+import CourseDetails from './pages/CourseDetails';
+import CreateCourse from './pages/CreateCourse';
+import Profile from './pages/Profile';
+import QA from './pages/QA';
+import QuestionDetail from './pages/QuestionDetail';
+import Chatbot from './pages/Chatbot';
+import Leaderboard from './pages/Leaderboard';
+import PaymentSuccess from './pages/PaymentSuccess';
+import MySessions from './pages/MySessions';
+
+const ProtectedRoute = ({ children, teacherOnly }) => {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="spinner" />;
+  if (!user) return <Navigate to="/login" />;
+  if (teacherOnly && user.role !== 'teacher') return <Navigate to="/" />;
+  return children;
+};
+
+const AppRoutes = () => (
+  <>
+    <Navbar />
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/courses" element={<Courses />} />
+      <Route path="/courses/:id" element={<CourseDetails />} />
+      <Route path="/create-course" element={<ProtectedRoute teacherOnly><CreateCourse /></ProtectedRoute>} />
+      <Route path="/profile/:username" element={<Profile />} />
+      <Route path="/qa" element={<QA />} />
+      <Route path="/qa/:id" element={<QuestionDetail />} />
+      <Route path="/chatbot" element={<Chatbot />} />
+      <Route path="/leaderboard" element={<Leaderboard />} />
+      <Route path="/payment-success" element={<PaymentSuccess />} />
+      <Route path="/my-sessions" element={<ProtectedRoute><MySessions /></ProtectedRoute>} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
+  </>
+);
+
+const App = () => (
+  <BrowserRouter>
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
+  </BrowserRouter>
+);
+
+export default App;

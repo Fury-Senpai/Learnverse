@@ -85,7 +85,7 @@ const MySessions = () => {
             </div>
 
             <div style={{ display: 'flex', gap: 20, fontSize: 13, color: 'var(--text2)', flexWrap: 'wrap', marginBottom: 12 }}>
-              <span>💰 ${s.price}</span>
+              <span>💰 ₹{s.price}</span>
               <span>📅 Booked {new Date(s.createdAt).toLocaleDateString()}</span>
               {s.endedAt && <span>🏁 Ended {new Date(s.endedAt).toLocaleDateString()}</span>}
             </div>
@@ -204,7 +204,7 @@ const MySessions = () => {
             { label: 'Total',     value: sessions.length,                                                                               color: 'var(--text)' },
             { label: 'Active',    value: grouped.active.length,                                                                         color: 'var(--success)' },
             { label: 'Completed', value: grouped.completed.length,                                                                      color: 'var(--accent3)' },
-            { label: 'Earned',    value: `$${sessions.filter(s => s.status === 'completed').reduce((a, s) => a + s.price * 0.7, 0).toFixed(2)}`, color: 'var(--accent2)' },
+            { label: 'Earned',    value: `₹${sessions.filter(s => s.status === 'completed').reduce((a, s) => a + s.price * 0.7, 0).toFixed(2)}`, color: 'var(--accent2)' },
           ].map(stat => (
             <div key={stat.label} className="card" style={{ flex: 1, minWidth: 120, textAlign: 'center', padding: '16px 12px' }}>
               <div style={{ fontSize: 22, fontWeight: 800, color: stat.color, fontFamily: 'Syne' }}>{stat.value}</div>

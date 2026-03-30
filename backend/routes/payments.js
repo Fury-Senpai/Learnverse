@@ -26,12 +26,12 @@ router.post('/checkout/course/:courseId', protect, async (req, res) => {
       mode: 'payment',
       line_items: [{
         price_data: {
-          currency: 'usd',
+          currency: 'inr',
           product_data: {
             name: course.title,
             description: course.description?.substring(0, 100),
           },
-          unit_amount: Math.round(course.price * 100),
+          unit_amount: Math.round(course.price * 100), // INR is also smallest unit = paise (1 ₹ = 100 paise)
         },
         quantity: 1,
       }],
@@ -85,9 +85,9 @@ router.post('/checkout/session/:teacherId', protect, async (req, res) => {
       mode: 'payment',
       line_items: [{
         price_data: {
-          currency: 'usd',
+          currency: 'inr',
           product_data: { name: `1:1 Session with ${teacher.name}` },
-          unit_amount: Math.round(teacher.sessionPrice * 100),
+          unit_amount: Math.round(teacher.sessionPrice * 100), // paise
         },
         quantity: 1,
       }],
@@ -129,8 +129,8 @@ router.post('/checkout/session/:teacherId', protect, async (req, res) => {
    WEBHOOK — Stripe events
    ✅ FIX 2: Raw body is already handled in server.js via
       app.use('/api/payments/webhook', express.raw({...}))
-   ✅ FIX 3: Earnings calc was wrong: amount_total is in CENTS
-      so  amount_total * 0.007  gives cents * 0.007  (completely wrong)
+   ✅ FIX 3: Earnings calc was wrong: amount_total is in PAISE (smallest INR unit)
+      so  amount_total * 0.007  gave paise * 0.007  (completely wrong)
       correct formula: (amount_total / 100) * 0.7
    ✅ FIX 4: Webhook must respond 200 FAST — moved all DB work
       into a non-blocking background process so Stripe doesn't
@@ -167,11 +167,11 @@ async function handleStripeEvent(event) {
   const { type, courseId, studentId, teacherId } = stripeSession.metadata;
   const sessionId  = stripeSession.id;
 
-  // amount_total is in CENTS → divide by 100 for dollars
-  const amountDollars = stripeSession.amount_total / 100;
-  const teacherCut    = amountDollars * 0.7;
+  // amount_total is in PAISE → divide by 100 for rupees (₹1 = 100 paise, same as cents/dollar)
+  const amountRupees = stripeSession.amount_total / 100;
+  const teacherCut   = amountRupees * 0.7;
 
-  console.log(`✅ Webhook: ${type} payment — session ${sessionId} — $${amountDollars}`);
+  console.log(`✅ Webhook: ${type} payment — session ${sessionId} — ₹${amountRupees}`);
 
   // Mark purchase completed
   const updated = await Purchase.findOneAndUpdate(
@@ -191,9 +191,9 @@ async function handleStripeEvent(event) {
           student:         studentId,
           course:          courseId,
           type:            'course',
-          amount:          amountDollars,
+          amount:          amountRupees,
           teacherEarning:  teacherCut,
-          platformEarning: amountDollars * 0.3,
+          platformEarning: amountRupees * 0.3,
           stripeSessionId: sessionId,
           status:          'completed',
         });
@@ -207,7 +207,7 @@ async function handleStripeEvent(event) {
     if (teacherId) {
       await User.findByIdAndUpdate(teacherId, { $inc: { earnings: teacherCut } });
     }
-    console.log(`✅ Course ${courseId} — student added, teacher +$${teacherCut.toFixed(2)}`);
+    console.log(`✅ Course ${courseId} — student added, teacher +₹${teacherCut.toFixed(2)}`);
 
   } else if (type === 'session') {
     await Session.findOneAndUpdate(
@@ -218,7 +218,7 @@ async function handleStripeEvent(event) {
     if (meta_teacherId) {
       await User.findByIdAndUpdate(meta_teacherId, { $inc: { earnings: teacherCut } });
     }
-    console.log(`✅ 1:1 session confirmed — teacher +$${teacherCut.toFixed(2)}`);
+    console.log(`✅ 1:1 session confirmed — teacher +₹${teacherCut.toFixed(2)}`);
   }
 }
 
@@ -242,8 +242,8 @@ router.get('/verify/:sessionId', protect, async (req, res) => {
 
         if (stripeSession.payment_status === 'paid') {
           const { type, courseId, teacherId } = stripeSession.metadata;
-          const amountDollars = stripeSession.amount_total / 100;
-          const teacherCut    = amountDollars * 0.7;
+          const amountRupees = stripeSession.amount_total / 100;
+          const teacherCut    = amountRupees * 0.7;
 
           // Update purchase
           purchase = await Purchase.findOneAndUpdate(

@@ -6,7 +6,7 @@ import { useAuth, API } from '../context/AuthContext';
 /* ─── Helpers ─── */
 const Stars = ({ value, onRate }) => (
   <div className="stars">
-    {[1, 2, 3, 4, 5].map(s => (
+    {[1,2,3,4,5].map(s => (
       <span key={s} className={`star ${s <= value ? 'filled' : 'empty'}`}
         onClick={() => onRate && onRate(s)} style={{ cursor: onRate ? 'pointer' : 'default' }}>★</span>
     ))}
@@ -134,7 +134,7 @@ const CourseDetails = () => {
           const accessRes = await axios.get(`${API}/payments/has-access/${id}`);
           setHasAccess(accessRes.data.hasAccess);
         }
-      } catch { } finally { setLoading(false); }
+      } catch {} finally { setLoading(false); }
     };
     fetchData();
   }, [id, user]);
@@ -152,13 +152,6 @@ const CourseDetails = () => {
       window.location.href = res.data.url;
     } catch (err) { alert(err.response?.data?.message || 'Payment error'); }
     finally { setBuying(false); }
-  };
-
-  const checkAccess = async () => {
-    try {
-      const res = await axios.get(`${API}/payments/has-access/${id}`);
-      setHasAccess(res.data.hasAccess);
-    } catch { }
   };
 
   const handleSaveCourse = async () => {
@@ -219,7 +212,7 @@ const CourseDetails = () => {
       const res = await axios.post(`${API}/courses/${id}/comments`, { body: newComment });
       setComments([res.data, ...comments]);
       setNewComment('');
-    } catch { }
+    } catch {}
   };
 
   const handleRate = async (rating) => {
@@ -306,13 +299,13 @@ const CourseDetails = () => {
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                   <div className="form-group">
-                    <label>Price (USD)</label>
+                    <label>Price (₹)</label>
                     <input className="form-control" type="number" min="0" step="0.01" value={courseForm.price} onChange={e => setCourseForm({ ...courseForm, price: parseFloat(e.target.value) || 0 })} />
                   </div>
                   <div className="form-group">
                     <label>Category</label>
                     <select className="form-control" value={courseForm.category} onChange={e => setCourseForm({ ...courseForm, category: e.target.value })}>
-                      {['General', 'Programming', 'Design', 'Business', 'Marketing', 'Science', 'Math', 'Language', 'Music', 'Other'].map(c => <option key={c}>{c}</option>)}
+                      {['General','Programming','Design','Business','Marketing','Science','Math','Language','Music','Other'].map(c => <option key={c}>{c}</option>)}
                     </select>
                   </div>
                 </div>
@@ -330,7 +323,7 @@ const CourseDetails = () => {
               <div>
                 <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
                   <span className="badge badge-cyan">{course.category || 'General'}</span>
-                  <span className={`badge ${isFree ? 'badge-success' : 'badge-accent'}`}>{isFree ? 'FREE' : `$${course.price}`}</span>
+                  <span className={`badge ${isFree ? 'badge-success' : 'badge-accent'}`}>{isFree ? 'FREE' : `₹${course.price}`}</span>
                   {isOwner && <span className="badge badge-pink">👑 Your Course</span>}
                 </div>
                 <h1 style={{ fontSize: 34, fontWeight: 800, lineHeight: 1.2, marginBottom: 16 }}>{course.title}</h1>
@@ -359,23 +352,16 @@ const CourseDetails = () => {
               <img src={course.thumbnail} alt={course.title} style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', borderRadius: 8, marginBottom: 16 }} />
             )}
             <div style={{ fontSize: 32, fontWeight: 800, marginBottom: 16, color: isFree ? 'var(--success)' : 'var(--text)' }}>
-              {isFree ? 'Free' : `$${course.price}`}
+              {isFree ? 'Free' : `₹${course.price}`}
             </div>
             {isOwner ? (
               <div className="alert alert-success">👑 You own this course</div>
             ) : canWatch ? (
               <div className="alert alert-success">✅ You have access to this course</div>
             ) : (
-              <div>
-                <button className="btn btn-primary btn-full btn-lg" onClick={handleBuy} disabled={buying}>
-                  {buying ? 'Redirecting...' : `Enroll Now — $${course.price}`}
-                </button>
-                <div style={{ textAlign: 'center', marginTop: 12 }}>
-                  <button onClick={checkAccess} style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontSize: 13, textDecoration: 'underline' }}>
-                    Already purchased? Refresh access
-                  </button>
-                </div>
-              </div>
+              <button className="btn btn-primary btn-full btn-lg" onClick={handleBuy} disabled={buying}>
+                {buying ? 'Redirecting...' : `Enroll Now — ₹${course.price}`}
+              </button>
             )}
             {canWatch && !isOwner && (
               <div style={{ marginTop: 20 }}>
@@ -419,7 +405,7 @@ const CourseDetails = () => {
               <div style={{ fontSize: 64 }}>🔒</div>
               <p style={{ color: 'var(--text2)' }}>Purchase this course to unlock all videos</p>
               <button className="btn btn-primary" onClick={handleBuy} disabled={buying}>
-                {buying ? 'Redirecting...' : `Enroll for $${course.price}`}
+                {buying ? 'Redirecting...' : `Enroll for ₹${course.price}`}
               </button>
             </div>
           )}

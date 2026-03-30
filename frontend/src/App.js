@@ -17,6 +17,8 @@ import Chatbot from './pages/Chatbot';
 import Leaderboard from './pages/Leaderboard';
 import PaymentSuccess from './pages/PaymentSuccess';
 import MySessions from './pages/MySessions';
+import Community from './pages/Community';
+import ModPanel from './pages/ModPanel';
 
 const ProtectedRoute = ({ children, teacherOnly }) => {
   const { user, loading } = useAuth();
@@ -43,6 +45,8 @@ const AppRoutes = () => (
       <Route path="/leaderboard" element={<Leaderboard />} />
       <Route path="/payment-success" element={<PaymentSuccess />} />
       <Route path="/my-sessions" element={<ProtectedRoute><MySessions /></ProtectedRoute>} />
+      <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+      <Route path="/mod" element={<ProtectedRoute><ModPanel /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   </>

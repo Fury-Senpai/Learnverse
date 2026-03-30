@@ -52,7 +52,7 @@ const CreateCourse = () => {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div className="form-group">
-              <label>Price (USD) — 0 for free</label>
+              <label>Price (₹) — 0 for free</label>
               <input className="form-control" type="number" min="0" step="0.01" value={form.price} onChange={e => setForm({ ...form, price: parseFloat(e.target.value) || 0 })} />
             </div>
             <div className="form-group">

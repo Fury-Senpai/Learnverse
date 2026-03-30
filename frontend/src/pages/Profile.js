@@ -81,7 +81,7 @@ const Profile = () => {
                 </div>
                 {profile.role === 'teacher' && (
                   <div className="form-group">
-                    <label>1:1 Session Price (USD)</label>
+                    <label>1:1 Session Price (₹)</label>
                     <input className="form-control" type="number" min="0" step="0.01" value={editForm.sessionPrice} onChange={e => setEditForm({ ...editForm, sessionPrice: parseFloat(e.target.value) || 0 })} />
                   </div>
                 )}
@@ -101,7 +101,7 @@ const Profile = () => {
                 <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
                   <span style={{ color: 'var(--accent)', fontWeight: 600 }}>⚡ {profile.karma} karma</span>
                   {profile.role === 'teacher' && profile.sessionPrice > 0 && (
-                    <span style={{ color: 'var(--success)', fontWeight: 600 }}>💼 ${profile.sessionPrice}/session</span>
+                    <span style={{ color: 'var(--success)', fontWeight: 600 }}>💼 ₹{profile.sessionPrice}/session</span>
                   )}
                 </div>
               </div>
@@ -113,7 +113,7 @@ const Profile = () => {
             )}
             {!isOwner && profile.role === 'teacher' && profile.sessionPrice > 0 && (
               <button className="btn btn-primary" onClick={handleBookSession} disabled={bookingSession}>
-                {bookingSession ? 'Redirecting...' : `📅 Book Session - $${profile.sessionPrice}`}
+                {bookingSession ? 'Redirecting...' : `📅 Book Session - ₹${profile.sessionPrice}`}
               </button>
             )}
           </div>

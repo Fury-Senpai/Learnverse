@@ -31,6 +31,7 @@ app.use('/api/qa',       require('./routes/qa'));
 app.use('/api/chatbot',  require('./routes/chatbot'));
 app.use('/api/sessions', require('./routes/sessions'));
 app.use('/api/search',   require('./routes/search'));
+app.use('/api/community', require('./routes/community'));
 
 app.get('/', (req, res) => res.json({ message: 'LearnHub API running ✅' }));
 

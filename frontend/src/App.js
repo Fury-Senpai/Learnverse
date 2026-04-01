@@ -21,6 +21,7 @@ import MySessions from './pages/MySessions';
 import Community from './pages/Community';
 import ModPanel from './pages/ModPanel';
 import BotpressChat from './components/BotPressChat';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 const ProtectedRoute = ({ children, teacherOnly }) => {
   const { user, loading } = useAuth();
@@ -50,6 +51,7 @@ const AppRoutes = () => (
         <Route path="/my-sessions" element={<ProtectedRoute><MySessions /></ProtectedRoute>} />
         <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
         <Route path="/mod" element={<ProtectedRoute><ModPanel /></ProtectedRoute>} />
+        <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </main>

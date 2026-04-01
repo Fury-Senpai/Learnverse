@@ -211,10 +211,10 @@ const Footer = () => {
           {/* Legal links */}
           <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
             {[
-              { label: 'Privacy Policy',   to: '/' },
+              { label: 'Privacy Policy',   to: '/privacyPolicy' },
               { label: 'Terms of Service', to: '/' },
-              { label: 'Cookie Policy',    to: '/' },
-              { label: 'Contact Us',       to: '/' },
+              { label: 'Cookie Policy',    to: '' },
+              { label: 'Contact Us',       to: 'https://github.com/fury-senpai' },
             ].map(({ label, to }) => (
               <Link key={label} to={to}
                 style={{ fontSize: 12, color: 'var(--text3)', letterSpacing: '0.01em', textDecoration: 'none', transition: 'color 0.15s' }}
@@ -228,9 +228,8 @@ const Footer = () => {
 
           {/* Made with */}
           <div style={{ fontSize: 12, color: 'var(--text3)', display: 'flex', alignItems: 'center', gap: 5 }}>
-            Built with
-            <span style={{ color: 'var(--error)', fontSize: 13 }}>♥</span>
-            using MERN stack
+            Built by
+            Nitish Harbola
           </div>
         </div>
       </div>

@@ -365,3 +365,103 @@ select.form-control {
 
 /* ── Selection ── */
 ::selection { background: rgba(111,95,232,0.35); color: #fff; }
+
+
+/* PRIVACY POLICY */
+/* Container */
+.privacy-div {
+  max-width: 900px;
+  margin: 80px auto;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.7;
+  color: #1f2937;
+}
+
+/* Headings */
+.privacy-div h1 {
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #0f172a;
+}
+
+.privacy-div h2 {
+  font-size: 26px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+  color: #111827;
+  border-left: 4px solid #0F9DF8;
+  padding-left: 12px;
+}
+
+.privacy-div h3 {
+  font-size: 20px;
+  margin-top: 25px;
+  color: #1e293b;
+}
+
+.privacy-div h4 {
+  font-size: 18px;
+  margin-top: 15px;
+  color: #334155;
+}
+
+/* Paragraph */
+.privacy-div p {
+  margin: 10px 0;
+  font-size: 15px;
+  color: #374151;
+}
+
+/* Lists */
+.privacy-div ul {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.privacy-div li {
+  margin-bottom: 8px;
+}
+
+/* Links */
+.privacy-div a {
+  color: #0F9DF8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.privacy-div a:hover {
+  text-decoration: underline;
+}
+
+/* Strong text */
+.privacy-div strong {
+  color: #111827;
+}
+
+/* Divider feel */
+.privacy-div h2::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #0F9DF8;
+  margin-top: 6px;
+  border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .privacy-div {
+    padding: 20px;
+    margin: 40px 15px;
+  }
+
+  .privacy-div h1 {
+    font-size: 30px;
+  }
+}

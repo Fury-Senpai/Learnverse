@@ -55,7 +55,7 @@ const AppRoutes = () => (
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </main>
-    <BotpressChat />
+    {/* <BotpressChat /> */}
     <Footer />
   </div>
 );

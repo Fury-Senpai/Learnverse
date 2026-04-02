@@ -223,7 +223,7 @@ pre  { padding: 16px; overflow-x: auto; line-height: 1.6; }
 }
 
 .form-control {
-  background: var(--bg3);
+  background: var(--bg);
   border: 1px solid var(--border2);
   border-radius: var(--r-md);
   padding: 11px 15px;
@@ -250,8 +250,12 @@ select.form-control {
   background-repeat: no-repeat;
   background-position: right 14px center;
   padding-right: 36px;
+  
 }
+select.form-control option{
+  background: #000;
 
+}
 /* ── Badges ── */
 .badge {
   display: inline-flex; align-items: center; gap: 4px;

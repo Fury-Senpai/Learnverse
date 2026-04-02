@@ -10,6 +10,9 @@ const CreateCourse = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  //course category
+  const coursesCategory = ['General', 'Programming', 'Design', 'Business', 'Marketing', 'Science', 'Math', 'Language', 'Music', 'Other'];
+  
   const addVideo = () => setVideos([...videos, { title: '', url: '', duration: '' }]);
   const removeVideo = (i) => setVideos(videos.filter((_, idx) => idx !== i));
   const updateVideo = (i, field, value) => {
@@ -58,7 +61,7 @@ const CreateCourse = () => {
             <div className="form-group">
               <label>Category</label>
               <select className="form-control" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}>
-                {['General', 'Programming', 'Design', 'Business', 'Marketing', 'Science', 'Math', 'Language', 'Music', 'Other'].map(c => <option key={c}>{c}</option>)}
+                {coursesCategory.map(c => <option key={c}>{c}</option>)}
               </select>
             </div>
           </div>

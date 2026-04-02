@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import siteLogo from '../assets/learnverse-logo.jpg'
 import SearchBar from './SearchBar';
 
 const Navbar = () => {
@@ -47,33 +48,73 @@ const Navbar = () => {
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 28px', display: 'flex', alignItems: 'center', height: 62, gap: 20 }}>
 
         {/* Logo */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          <div style={{
-            width: 34, height: 34, borderRadius: 10,
-            background: isMod
-              ? 'linear-gradient(135deg, #f59e0b, #ef4444)'
-              : 'linear-gradient(135deg, var(--accent), var(--accent2))',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 17,
-            boxShadow: isMod
-              ? '0 4px 16px rgba(245,158,11,0.42)'
-              : '0 4px 16px rgba(111,95,232,0.42)',
-            transition: 'transform 0.2s var(--ease-spring)',
-          }}
-            onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08) rotate(-4deg)'}
-            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1) rotate(0)'}
-          >
-            {isMod ? '🛡️' : '⚡'}
-          </div>
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, letterSpacing: '-0.04em', color: 'var(--text)' }}>
-            Learn<span style={{
+        <Link 
+        to="/" 
+        style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}
+      >
+        {/* Logo Container (same as before) */}
+        <div
+          style={{
+              width: 40,
+              height: 40,
+              borderRadius: 10,
               background: isMod
                 ? 'linear-gradient(135deg, #f59e0b, #ef4444)'
-                : 'linear-gradient(130deg, var(--accent) 10%, var(--accent-mid) 45%, var(--accent2) 90%)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-            }}>Hub</span>
+                : 'linear-gradient(135deg, var(--accent), var(--accent2))',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: isMod
+                ? '0 4px 16px rgba(245,158,11,0.42)'
+                : '0 4px 16px rgba(111,95,232,0.42)',
+              transition: 'transform 0.2s var(--ease-spring)',
+              overflow: 'hidden' // important for image fit
+            }}
+            onMouseEnter={e =>
+              (e.currentTarget.style.transform = 'scale(1.08) rotate(-4deg)')
+            }
+            onMouseLeave={e =>
+              (e.currentTarget.style.transform = 'scale(1) rotate(0)')
+            }
+          >
+            {/*  Logo */}
+            <img
+              src={siteLogo} // <-- change this path
+              alt="LearnVerse Logo"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                pointerEvents: 'none'
+              }}
+            />
+          </div>
+
+          {/* Text */}
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 700,
+              fontSize: 18,
+              letterSpacing: '-0.04em',
+              color: 'var(--text)'
+            }}
+          >
+            Learn
+            <span
+              style={{
+                background: isMod
+                  ? 'linear-gradient(135deg, #f59e0b, #ef4444)'
+                  : 'linear-gradient(130deg, var(--accent) 10%, var(--accent-mid) 45%, var(--accent2) 90%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              Verse
+            </span>
           </span>
-        </Link>
+  </Link>
 
         {/* Search */}
         <div style={{ flex: 1, maxWidth: 360 }}>

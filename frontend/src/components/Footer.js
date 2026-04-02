@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-
+import siteLogo from '../assets/learnverse-logo.jpg'
 /* ── Icon components (pure SVG, no emoji) ── */
 const IconGithub = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -112,19 +112,68 @@ const Footer = () => {
           {/* Brand column */}
           <div>
             {/* Logo */}
-            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 16, textDecoration: 'none' }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                background: 'linear-gradient(135deg, var(--accent), var(--accent2))',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 17, boxShadow: '0 4px 16px rgba(111,95,232,0.35)',
-              }}>⚡</div>
-              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.04em', color: 'var(--text)' }}>
+            <Link 
+              to="/" 
+              style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: 10, 
+                marginBottom: 16, 
+                textDecoration: 'none' 
+              }}
+            >
+              {/* Logo Box */}
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 10,
+                  flexShrink: 0,
+                  background: 'linear-gradient(135deg, var(--accent), var(--accent2))',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 16px rgba(111,95,232,0.35)',
+                  overflow: 'hidden',
+                  transition: 'transform 0.3s ease'
+                }}
+                onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
+                onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+              >
+                {/* 🔥 Your Logo */}
+                <img
+                  src={siteLogo} 
+                  alt="LearnVerse Logo"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain'
+                  }}
+                />
+              </div>
+
+              {/* Text */}
+              <span
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 700,
+                  fontSize: 20,
+                  letterSpacing: '-0.04em',
+                  color: 'var(--text)'
+                }}
+              >
                 Learn
-                <span style={{
-                  background: 'linear-gradient(130deg, var(--accent) 10%, var(--accent-mid) 45%, var(--accent2) 90%)',
-                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                }}>Hub</span>
+                <span
+                  style={{
+                    background:
+                      'linear-gradient(130deg, var(--accent) 10%, var(--accent-mid) 45%, var(--accent2) 90%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text'
+                  }}
+                >
+                  Verse
+                </span>
               </span>
             </Link>
 

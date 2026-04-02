@@ -674,7 +674,7 @@ const CourseDetails = () => {
         <div style={{ background:'var(--bg2)', borderBottom:'1px solid var(--border)', padding:'0 24px' }}>
           <div className="container" style={{ display:'flex', gap:4, paddingTop:8, paddingBottom:8 }}>
             <button style={tabStyle('content')}  onClick={() => setActiveTab('content')}>🎬 Content</button>
-            <button style={tabStyle('polls')}    onClick={() => setActiveTab('polls')}>📊 Polls {polls.length > 0 && `(${polls.length})`}</button>
+            <button style={tabStyle('polls')}    onClick={() => setActiveTab('polls')}>📊 Quiz Section {polls.length > 0 && `(${polls.length})`}</button>
             <button style={tabStyle('notes')}    onClick={() => setActiveTab('notes')}>📎 Notes & Assignments {notes.length > 0 && `(${notes.length})`}</button>
             <button style={tabStyle('comments')} onClick={() => setActiveTab('comments')}>💬 Comments ({comments.length})</button>
           </div>
